@@ -53,7 +53,7 @@ public class Cena implements GLEventListener, KeyListener {
         gl.glColor3f(0.0f, 0.5f, 1.0f);
         parede();
 
-        gl.glRotatef(90, 0, 1, 0);
+        gl.glRotatef(180, 0, 1, 1);
         gl.glColor3f(0.0f, 0.5f, 1.0f);
         parede();
         
