@@ -56,8 +56,8 @@ public class Cena implements GLEventListener, KeyListener {
         gl.glRotatef(180, 0, 1, 1);
         gl.glColor3f(0.0f, 0.5f, 1.0f);
         parede();
-        
-        gl.glColor3f(0.1f, 0.1f, 1.0f);
+
+        gl.glColor3f(0.1f, 0.0f, 1.0f);
         mesa();
 
         if (liga) {
@@ -77,12 +77,7 @@ public class Cena implements GLEventListener, KeyListener {
     }
 
     private void mesa() {
-        gl.glBegin(GL2.GL_QUADS);
-        gl.glVertex3f(-30.0f, 30.0f, -30.0f);
-        gl.glVertex3f(30.0f, 30.0f, -30.0f);
-        gl.glVertex3f(30.0f, -30.0f, -30.0f);
-        gl.glVertex3f(-30.0f, -30.0f, -30.0f);
-        gl.glEnd();
+        glut.glutSolidCylinder(50, 5, 4, 4);
     }
 
     public void iluminacaoAmbiente() {
