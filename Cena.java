@@ -16,6 +16,7 @@ public class Cena implements GLEventListener, KeyListener {
     private GLUT glut;
     private int tonalizacao = GL2.GL_SMOOTH;
     private boolean liga = true;
+    private int modo = GL2.GL_FILL;
 
     @Override
     public void init(GLAutoDrawable drawable) {
@@ -38,16 +39,12 @@ public class Cena implements GLEventListener, KeyListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity(); //lê a matriz identidade
 
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, modo);
         /*
             desenho da cena        
         *
          */
         // criar a cena aqui....
-        if (liga) {
-            iluminacaoAmbiente();
-            ligaLuz();
-        }
-
         gl.glRotatef(angulo, 0.0f, 1.0f, 1.0f);
 
         gl.glColor3f(0.0f, 0.5f, 1.0f);
@@ -56,6 +53,11 @@ public class Cena implements GLEventListener, KeyListener {
         gl.glRotatef(180, 0, 1, 1);
         gl.glColor3f(0.0f, 0.5f, 1.0f);
         parede();
+
+        if (liga) {
+            iluminacaoEspecular();
+            ligaLuz();
+        }
 
         gl.glRotatef(45, 0, 0, 1);
         gl.glColor3f(1.0f, 0.0f, 0.0f);
@@ -89,6 +91,8 @@ public class Cena implements GLEventListener, KeyListener {
 
         gl.glPopMatrix();
 
+        abajur();
+
         if (liga) {
             desligaluz();
         }
@@ -113,26 +117,46 @@ public class Cena implements GLEventListener, KeyListener {
         glut.glutSolidCylinder(3, 50, 4, 4);
     }
 
-    public void iluminacaoAmbiente() {
-        float luzAmbiente[] = {0.2f, 0.2f, 0.2f, 1.0f}; //cor
-        float posicaoLuz[] = {-50.0f, 0.0f, 100.0f, 1.0f}; //pontual
+    private void abajur() {
+        gl.glColor3f(0.0f, 1.0f, 0.0f);
+        glut.glutSolidCylinder(4, 35, 4, 4);
+        gl.glTranslatef(0, 0, 35);
+        glut.glutSolidSphere(4, 20, 20);
+        gl.glColor3f(1.0f, 0.7f, 0.0f);
+        gl.glTranslatef(0, 0, -13);
+        glut.glutSolidCone(25, 15, 40, 40);
+    }
 
-        // define parametros de luz de número 0 (zero)
+    public void iluminacaoEspecular() {
+        float luzAmbiente[] = {0f, 0.0f, 0f, 0f}; //cor
+        float luzEspecular[] = {1.0f, 0.0f, 1.0f, 1.0f}; //cor
+        float posicaoLuz[] = {35.0f, 35.0f, 35.0f, 0.0f}; //pontual
+
+        //intensidade da reflexao do material        
+        int especMaterial = 128;
+        //define a concentracao do brilho
+        gl.glMateriali(GL2.GL_FRONT, GL2.GL_SHININESS, especMaterial);
+
+        //define a reflectÃ¢ncia do material
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, luzEspecular, 0);
+
+        //define os parÃ¢metros de luz de nÃºmero 0 (zero)
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, luzAmbiente, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, luzEspecular, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, posicaoLuz, 0);
     }
 
     public void ligaLuz() {
-        // habilita a definição da cor do material a partir da cor corrente
+        // habilita a definiÃ§Ã£o da cor do material a partir da cor corrente
         gl.glEnable(GL2.GL_COLOR_MATERIAL);
 
-        // habilita o uso da iluminação na cena
+        // habilita o uso da iluminaÃ§Ã£o na cena
         gl.glEnable(GL2.GL_LIGHTING);
-        // habilita a luz de número 0
+        // habilita a luz de nÃºmero 0
         gl.glEnable(GL2.GL_LIGHT0);
         //Especifica o Modelo de tonalizacao a ser utilizado 
         //GL_FLAT -> modelo de tonalizacao flat 
-        //GL_SMOOTH -> modelo de tonalização GOURAUD (default)        
+        //GL_SMOOTH -> modelo de tonalizaÃ§Ã£o GOURAUD (default)        
         gl.glShadeModel(tonalizacao);
     }
 
@@ -184,6 +208,13 @@ public class Cena implements GLEventListener, KeyListener {
                     liga = true;
                 }
                 System.out.println(liga);
+                break;
+            case 'w':
+                if (modo == (GL2.GL_FILL)) {
+                    modo = GL2.GL_LINE;
+                } else {
+                    modo = GL2.GL_FILL;
+                }
                 break;
         }
     }
