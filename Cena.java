@@ -57,8 +57,37 @@ public class Cena implements GLEventListener, KeyListener {
         gl.glColor3f(0.0f, 0.5f, 1.0f);
         parede();
 
-        gl.glColor3f(0.1f, 0.0f, 1.0f);
+        gl.glRotatef(45, 0, 0, 1);
+        gl.glColor3f(1.0f, 0.0f, 0.0f);
+
+        gl.glPushMatrix();
         mesa();
+        gl.glTranslatef(45, 0, 0);
+        gl.glRotatef(180, 0, 1, 0);
+        pernas();
+
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(-45, 0, 0);
+        gl.glRotatef(180, 0, 1, 0);
+        pernas();
+
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0, 45, 0);
+        gl.glRotatef(180, 0, 1, 0);
+        pernas();
+
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0, -45, 0);
+        gl.glRotatef(180, 0, 1, 0);
+        pernas();
+
+        gl.glPopMatrix();
 
         if (liga) {
             desligaluz();
@@ -78,6 +107,10 @@ public class Cena implements GLEventListener, KeyListener {
 
     private void mesa() {
         glut.glutSolidCylinder(50, 5, 4, 4);
+    }
+
+    private void pernas() {
+        glut.glutSolidCylinder(3, 50, 4, 4);
     }
 
     public void iluminacaoAmbiente() {
